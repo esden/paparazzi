@@ -10,4 +10,15 @@
    settings_modules="modules/gps_ubx_ucenter.xml modules/air_data.xml"
    gui_color="blue"
   />
+  <aircraft
+   name="SonOfJackMLKF"
+   ac_id="2"
+   airframe="airframes/caes/son_of_jack_mlkf.xml"
+   radio="radios/spektrum.xml"
+   telemetry="telemetry/default_rotorcraft.xml"
+   flight_plan="flight_plans/rotorcraft_basic.xml"
+   settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_att_int.xml settings/estimation/ahrs_float_mlkf.xml"
+   settings_modules="modules/gps_ubx_ucenter.xml modules/air_data.xml"
+   gui_color="blue"
+  />
 </conf>
