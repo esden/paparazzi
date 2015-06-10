@@ -470,3 +470,16 @@ test_settings.srcs   += subsystems/settings.c
 test_settings.srcs   += $(SRC_ARCH)/subsystems/settings_arch.c
 test_settings.srcs   += test/subsystems/test_settings.c
 test_settings.CFLAGS += -DUSE_PERSISTENT_SETTINGS
+
+#
+# test ws2812 LEDs
+#
+test_ws2812.ARCHDIR = $(ARCH)
+test_ws2812.CFLAGS += $(COMMON_TEST_CFLAGS)
+test_ws2812.srcs   += $(COMMON_TEST_SRCS)
+test_ws2812.CFLAGS += $(COMMON_TELEMETRY_CFLAGS)
+test_ws2812.srcs   += $(COMMON_TELEMETRY_SRCS)
+
+test_ws2812.srcs   += test/peripherals/test_ws2812.c
+test_ws2812.srcs   += peripherals/ws2812.c $(SRC_ARCH)/peripherals/ws2812_arch.c
+

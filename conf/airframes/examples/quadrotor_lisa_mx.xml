@@ -60,6 +60,7 @@
     <target name="test_imu" board="lisa_mx_2.1">
       <subsystem name="imu" type="lisa_mx_v2.1"/>
     </target>
+    <target name="test_ws2812" board="lisa_mx_2.1"/>
   </firmware>
 
   <autopilot name="rotorcraft_autopilot.xml" freq="512"/>
