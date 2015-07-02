@@ -35,6 +35,8 @@
 
 #include "peripherals/ws2812_arch.h"
 
+#include "led.h"
+
 #ifndef STM32F4
 #error "WS2812 arch currently only implemented for STM32F4"
 #endif
@@ -137,7 +139,7 @@ void dma1_stream6_isr(void)
     if (dma_get_interrupt_flag(DMA1, DMA_STREAM6, DMA_HTIF) != 0) {
         dma_clear_interrupt_flags(DMA1, DMA_STREAM6, DMA_HTIF);
 
-        //gpio_toggle(GPIOD, GPIO13);
+        //LED_TOGGLE(3);
 
         if(ws2812_arch_status->stage != ws2812_idle){
         	if(ws2812_arch_status->stage == ws2812_done) {
@@ -156,7 +158,7 @@ void dma1_stream6_isr(void)
     if (dma_get_interrupt_flag(DMA1, DMA_STREAM6, DMA_TCIF) != 0) {
         dma_clear_interrupt_flags(DMA1, DMA_STREAM6, DMA_TCIF);
 
-        //gpio_toggle(GPIOD, GPIO14);
+        //LED_TOGGLE(4);
 
         if(ws2812_arch_status->stage != ws2812_idle){
             if(ws2812_arch_status->stage == ws2812_done) {
