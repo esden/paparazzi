@@ -90,16 +90,16 @@ void ws2812_fill_bit_buffer(bool low_high)
 	}
 
 	/*
-	 * 60 = 1
-	 * 29 = 0
+	 * 75 = 1 (Excatly would be 75.6 - 1)
+	 * 28 = 0 (Exactly would be 29.4 - 1)
 	 */
 	for(i = 0; i < bitcount; i++) {
 		if (i < ((ws2812_status.led_count - ws2812_status.leds_sent) * 24)) {
 			if (((ws2812_status.leds[ws2812_status.leds_sent + (i/24)].grbu >> (31 - (i % 24)))
 				 & 0x00000001) != 0) {
-				ws2812_status.bit_buffer[offset + i] = 60;
+				ws2812_status.bit_buffer[offset + i] = 76;
 			} else {
-				ws2812_status.bit_buffer[offset + i] = 29;
+				ws2812_status.bit_buffer[offset + i] = 28;
 			}
 			led = ws2812_status.leds_sent + ((i + 0) / 24);
 		} else {
