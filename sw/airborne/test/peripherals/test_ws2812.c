@@ -27,15 +27,10 @@
 #include "peripherals/ws2812.h"
 #include "led.h"
 
-#define LED_COUNT (16)
+#define LED_COUNT (12)
 
 struct ws2812_led_status {
   ws2812_led_t leds[LED_COUNT];
-  struct {
-    int r;
-    int g;
-    int b;
-  } dir[LED_COUNT];
 
   uint32_t timer;
 } ws2812_led_status;
@@ -44,29 +39,83 @@ static inline void main_init(void);
 static inline void main_periodic_task(void);
 static inline void main_event_task(void);
 static inline void ws2812_led_init(void);
-static inline void ws2912_led_inc(void);
+static inline void ws2812_led_inc(void);
+static inline void ws2812_led_set_wheel(ws2812_led_t *led, int angle);
+
+/* The angle from 0deg to 360deg represented by a value from 0 to 1536. */
+void ws2812_led_set_wheel(ws2812_led_t *led, int angle)
+{
+  int segment_angle;
+
+  if (angle < 0) {
+    led->colors.r = 0;
+    led->colors.g = 0;
+    led->colors.b = 0;
+    return;
+  }
+
+  if (angle > 1535) {
+    led->colors.r = 255;
+    led->colors.g = 255;
+    led->colors.b = 255;
+    return;
+  }
+
+  if(angle > (255 * 0) && angle <= (255 * 1)) {
+    segment_angle = angle - (255 * 0);
+    led->colors.r = 255;
+    led->colors.g = segment_angle;
+    led->colors.b = 0;
+  } else if(angle > (255 * 1) && angle <= (255 * 2)) {
+    segment_angle = angle - (255 * 1);
+    led->colors.r = 255 - segment_angle;
+    led->colors.g = 255;
+    led->colors.b = 0;
+  } else if(angle > (255 * 2) && angle <= (255 * 3)) {
+    segment_angle = angle - (255 * 2);
+    led->colors.r = 0;
+    led->colors.g = 255;
+    led->colors.b = segment_angle;
+  } else if(angle > (255 * 3) && angle <= (255 * 4)) {
+    segment_angle = angle - (255 * 3);
+    led->colors.r = 0;
+    led->colors.g = 255 - segment_angle;
+    led->colors.b = 255;
+  } else if(angle > (255 * 4) && angle <= (255 * 5)) {
+    segment_angle = angle - (255 * 4);
+    led->colors.r = segment_angle;
+    led->colors.g = 0;
+    led->colors.b = 255;
+  } else if(angle > (255 * 5) && angle <= (255 * 6)) {
+    segment_angle = angle - (255 * 5);
+    led->colors.r = 255;
+    led->colors.g = 0;
+    led->colors.b = 255 - segment_angle;
+  }
+}
 
 void ws2812_led_init(void)
 {
   int i;
-  int8_t color;
 
   for (i = 0; i < LED_COUNT; i++) {
     ws2812_led_status.leds[i].grbu = 0;
   }
 
-  color = 10;
+  ws2812_led_status.timer = 0;
+
   for (i = 0; i < LED_COUNT; i++) {
-    color += 10;
-    ws2812_led_status.leds[i].colors.r = color;
+    ws2812_led_set_wheel(&ws2812_led_status.leds[i], i * 127);
   }
 }
 
 void ws2812_led_inc(void)
 {
   int i;
-  for (i = 0; i <LED_COUNT; i++) {
-    ws2812_led_status.leds[i].colors.r += 10;
+  ws2812_led_status.timer = (ws2812_led_status.timer + 10) % 1535;
+
+  for (i = 0; i < LED_COUNT; i++) {
+    ws2812_led_set_wheel(&ws2812_led_status.leds[i], (ws2812_led_status.timer + (i * 127)) % 1535);
   }
 }
 
@@ -105,6 +154,11 @@ static inline void main_periodic_task(void)
     LED_PERIODIC();
   });
 
+  if (!ws2812_is_sending()) {
+    ws2812_led_inc();
+    ws2812_send(ws2812_led_status.leds, LED_COUNT);
+  }
+
   //ms2100_periodic(&ms2100);
 
 }
@@ -114,10 +168,10 @@ static inline void main_event_task(void)
   mcu_event();
 
 
+#if 0
   if (!ws2812_is_sending()) {
     ws2812_led_inc();
     ws2812_send(ws2812_led_status.leds, LED_COUNT);
-#if 0
   ms2100_event(&ms2100);
   if (ms2100.status == MS2100_DATA_AVAILABLE) {
     RunOnceEvery(10, {
@@ -128,7 +182,7 @@ static inline void main_event_task(void)
       &mag_x, &mag_y, &mag_z);
     });
     ms2100.status = MS2100_IDLE;
-#endif
   }
+#endif
 }
 
