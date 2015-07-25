@@ -30,5 +30,6 @@
 
 void ws2812_arch_init(struct ws2812_status *ws2812_status);
 void ws2812_arch_send(void);
+bool ws2812_arch_running(void);
 
 #endif /* WS2812_ARCH_H */

@@ -41,6 +41,10 @@
 #error "WS2812 arch currently only implemented for STM32F4"
 #endif
 
+#ifndef WS2812_DEBUG
+#define WS2812_DEBUG 1
+#endif
+
 /* Private variable definitions. */
 struct ws2812_status *ws2812_arch_status;
 
@@ -67,6 +71,11 @@ void ws2812_arch_send(void)
 	ws2812_arch_dma_start();
 }
 
+bool ws2812_arch_running(void)
+{
+    return (DMA_SCR(DMA1, DMA_STREAM6) & DMA_SxCR_EN) != 0;
+}
+
 /* Private function definitions */
 void ws2812_arch_gpio_init(void)
 {
@@ -76,6 +85,11 @@ void ws2812_arch_gpio_init(void)
     gpio_set_af(GPIOB, GPIO_AF2, GPIO6);
     /* Not sure why this does not really do the job if we have a pullup to 5V */
     gpio_set_output_options(GPIOB, GPIO_OTYPE_OD, GPIO_OSPEED_2MHZ, GPIO6);
+
+#if WS2812_DEBUG
+    gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO7);
+    gpio_clear(GPIOB, GPIO7);
+#endif
 }
 
 void ws2812_arch_tim_init(void)
@@ -125,12 +139,18 @@ void ws2812_arch_dma_init(void)
 
 void ws2812_arch_dma_start(void)
 {
-	dma_enable_stream(DMA1, DMA_STREAM6);
+#if WS2812_DEBUG
+    gpio_set(GPIOB, GPIO7);
+#endif
+    dma_enable_stream(DMA1, DMA_STREAM6);
 }
 
 void ws2812_arch_dma_stop(void)
 {
-	dma_disable_stream(DMA1, DMA_STREAM6);
+#if WS2812_DEBUG
+	gpio_clear(GPIOB, GPIO7);
+#endif
+    dma_disable_stream(DMA1, DMA_STREAM6);
 }
 
 /* Interrupt handlers. */
@@ -138,8 +158,6 @@ void dma1_stream6_isr(void)
 {
     if (dma_get_interrupt_flag(DMA1, DMA_STREAM6, DMA_HTIF) != 0) {
         dma_clear_interrupt_flags(DMA1, DMA_STREAM6, DMA_HTIF);
-
-        //LED_TOGGLE(3);
 
         if(ws2812_arch_status->stage != ws2812_idle){
         	if(ws2812_arch_status->stage == ws2812_done) {
@@ -157,8 +175,6 @@ void dma1_stream6_isr(void)
     }
     if (dma_get_interrupt_flag(DMA1, DMA_STREAM6, DMA_TCIF) != 0) {
         dma_clear_interrupt_flags(DMA1, DMA_STREAM6, DMA_TCIF);
-
-        //LED_TOGGLE(4);
 
         if(ws2812_arch_status->stage != ws2812_idle){
             if(ws2812_arch_status->stage == ws2812_done) {

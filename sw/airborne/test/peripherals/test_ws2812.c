@@ -112,7 +112,9 @@ void ws2812_led_init(void)
 void ws2812_led_inc(void)
 {
   int i;
-  ws2812_led_status.timer = (ws2812_led_status.timer + 10) % 1535;
+  
+  ws2812_led_status.timer = (ws2812_led_status.timer + 1) % 1535;
+  
 
   for (i = 0; i < LED_COUNT; i++) {
     ws2812_led_set_wheel(&ws2812_led_status.leds[i], (ws2812_led_status.timer + (i * 127)) % 1535);
@@ -154,11 +156,12 @@ static inline void main_periodic_task(void)
     LED_PERIODIC();
   });
 
+#if 0
   if (!ws2812_is_sending()) {
     ws2812_led_inc();
     ws2812_send(ws2812_led_status.leds, LED_COUNT);
   }
-
+#endif
   //ms2100_periodic(&ms2100);
 
 }
@@ -184,5 +187,9 @@ static inline void main_event_task(void)
     ms2100.status = MS2100_IDLE;
   }
 #endif
+  if (!ws2812_is_sending()) {
+    ws2812_led_inc();
+    ws2812_send(ws2812_led_status.leds, LED_COUNT);
+  }
 }
 

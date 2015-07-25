@@ -55,7 +55,7 @@ void ws2812_send(ws2812_led_t *leds, int led_count)
 
 bool ws2812_is_sending(void)
 {
-	return (ws2812_status.stage != ws2812_idle);
+	return (ws2812_arch_running()) || (ws2812_status.stage != ws2812_idle);
 }
 
 /* Private functions */
@@ -83,11 +83,19 @@ void ws2812_fill_bit_buffer(bool low_high)
 	int led = ws2812_status.leds_sent;
 	int i;
 
-	ws2812_status.stage = ws2812_sending;
-
 	if(low_high) {
 		offset = bitcount;
 	}
+
+	if (ws2812_status.stage == ws2812_reset) {
+		for (i = 0; i < bitcount; i++) {
+			ws2812_status.bit_buffer[offset + i] = 0;
+		}
+		ws2812_status.stage = ws2812_done;
+		return;
+	}
+
+	ws2812_status.stage = ws2812_sending;
 
 	/*
 	 * 75 = 1 (Excatly would be 75.6 - 1)
@@ -97,13 +105,13 @@ void ws2812_fill_bit_buffer(bool low_high)
 		if (i < ((ws2812_status.led_count - ws2812_status.leds_sent) * 24)) {
 			if (((ws2812_status.leds[ws2812_status.leds_sent + (i/24)].grbu >> (31 - (i % 24)))
 				 & 0x00000001) != 0) {
-				ws2812_status.bit_buffer[offset + i] = 76;
+				ws2812_status.bit_buffer[offset + i] = 75;
 			} else {
-				ws2812_status.bit_buffer[offset + i] = 28;
+				ws2812_status.bit_buffer[offset + i] = 29;
 			}
 			led = ws2812_status.leds_sent + ((i + 0) / 24);
 		} else {
-			ws2812_status.stage = ws2812_done;
+			ws2812_status.stage = ws2812_reset;
 			break;
 		}
 	}
