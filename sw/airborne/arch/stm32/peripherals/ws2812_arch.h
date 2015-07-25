@@ -28,6 +28,14 @@
 #ifndef WS2812_ARCH_H
 #define WS2812_ARCH_H
 
+#if USE_SERVOS_7AND8
+#error "You cannot USE_SERVOS_7AND8 and WS2812 driver at the same time"
+#endif
+
+#if USE_I2C1
+#error "You cannot USE_I2C1 and WS2812 driver at the same time"
+#endif
+
 void ws2812_arch_init(struct ws2812_status *ws2812_status);
 void ws2812_arch_send(void);
 bool ws2812_arch_running(void);
