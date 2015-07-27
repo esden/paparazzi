@@ -55,6 +55,14 @@
 #define LIGHT_NEO_HEADING_INVERT -1
 #endif
 
+/*
+ * 0: disabled
+ * 1: blue -> x, green -> y
+ */
+#ifndef LIGHT_NEO_GRADIENT
+#define LIGHT_NEO_GRADIENT 1
+#endif
+
 struct light_neo_status {
   ws2812_led_t leds[LED_COUNT];
 
@@ -63,6 +71,7 @@ struct light_neo_status {
 
 /* Private function declarations. */
 void light_neo_set_dot(void);
+void light_neo_set_gradient(void);
 
 /* Implementation. */
 void light_neo_init(void)
@@ -89,28 +98,36 @@ void light_neo_periodic(void)
 		light_neo_status.leds[i].grbu = 0x00000000;
 	}
 
+	switch (LIGHT_NEO_GRADIENT) {
+	case 0:
+		break;
+	case 1:
+		light_neo_set_gradient();
+		break;
+	}
+
 	switch (LIGHT_NEO_HEADING) {
 	case 0:
-	break;
+		break;
 	case 1: /* Red Dot */
-	light_neo_set_dot();
-	break;
+		light_neo_set_dot();
+		break;
 	default:
-	break;
+		break;
 	}
 
 	switch (LIGHT_NEO_STROBE) {
 	case 0:
-	break;
+		break;
 	case 1:
 		if ((light_neo_status.timer % 55) >= 50) {
 			for (i = 0; i < LED_COUNT; i++) {
 				light_neo_status.leds[i].grbu = 0xFFFFFFFF;
 			}
 		}
-	break;
+		break;
 	default:
-	break;
+		break;
 	}
 
 	if (!ws2812_is_sending()) {
@@ -128,10 +145,40 @@ void light_neo_set_dot(void)
 
 	/* Set the red component of the using a cos gradient. */
 	for (i = 0; i < LED_COUNT; i++) {
-		value = cosf(heading + (i * ((M_PI * 2) / LED_COUNT))) * 64;
+		value = (cosf(heading + (i * ((M_PI * 2) / LED_COUNT))) * 1024) - 767;
 		if (value > 0) {
 			light_neo_status.leds[i].colors.r += value;
 		}
 	}
 
+}
+
+void light_neo_set_gradient(void)
+{
+	int i;
+	struct EnuCoor_f *pos = stateGetPositionEnu_f();
+
+	if ((pos->x) < -5.0 || (pos->x > 5.0)) {
+		if ((light_neo_status.timer % 55) >= 45) {
+			for (i = 0; i < LED_COUNT; i++) {
+				light_neo_status.leds[i].colors.g = 0xFF;
+			}
+		}
+	} else {
+		for (i = 0; i < LED_COUNT; i++) {
+			light_neo_status.leds[i].colors.g = (pos->x + 5.0) * 25.5;
+		}
+	}
+
+	if ((pos->y) < -5.0 || (pos->y > 5.0)) {
+		if ((light_neo_status.timer % 55) >= 45) {
+			for (i = 0; i < LED_COUNT; i++) {
+				light_neo_status.leds[i].colors.b = 0xFF;
+			}
+		}
+	} else {
+		for (i = 0; i < LED_COUNT; i++) {
+			light_neo_status.leds[i].colors.b = (pos->y + 5.0) * 25.5;
+		}
+	}
 }
