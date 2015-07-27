@@ -44,7 +44,6 @@
     <!--define name="KILL_ON_GROUND_DETECT" value="TRUE"/-->
   </firmware>
 
-
   <modules>
     <load name="gps_ubx_ucenter.xml"/>
     <load name="geo_mag.xml"/>

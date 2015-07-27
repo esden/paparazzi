@@ -1,0 +1,18 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="light_neo" dir="light">
+  <doc>
+    <description>NeoPixel (WS2812) based aircraft lighting.</description>
+  </doc>
+  <header>
+    <file name="light_neo.h"/>
+  </header>
+  <init fun="light_neo_init()"/>
+  <periodic fun="light_neo_periodic()" period="0.01" autorun="TRUE"/>
+  <makefile>
+    <file name="light_neo.c"/>
+    <file name="ws2812.c" dir="peripherals"/>
+    <file_arch name="ws2812_arch.c" dir="peripherals"/>
+  </makefile>
+</module>
+
