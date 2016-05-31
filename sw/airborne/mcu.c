@@ -91,6 +91,16 @@ void mcu_init(void)
   }
 #endif
 
+  /* Enable power to the IMU */
+#if defined IMU_POW_CTRL
+  gpio_enable_clock(IMU_POW_GPIO_PORT);
+  gpio_set(IMU_POW_GPIO_PORT, IMU_POW_GPIO_PIN);
+  gpio_setup_output(IMU_POW_GPIO_PORT, IMU_POW_GPIO_PIN);
+  /* We need to wait a little bit for the power to stabilize */
+  for (int i = 0; i < 0xFFFFFF; i++)
+    asm("nop");
+#endif
+
 #ifdef PERIPHERALS_AUTO_INIT
   sys_time_init();
 #ifdef USE_LED
