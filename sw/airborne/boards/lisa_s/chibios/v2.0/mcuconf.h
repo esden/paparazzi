@@ -18,7 +18,7 @@
 #define _MCUCONF_H_
 
 /*
- * STM32F4xx drivers configuration.
+ * STM32F7xx drivers configuration.
  * The following settings override the default settings present in
  * the various device driver implementation headers.
  * Note that the settings for each driver only have effect if the whole
@@ -41,9 +41,9 @@
 #define STM32_PLS                           STM32_PLS_LEV0
 #define STM32_BKPRAM_ENABLE                 FALSE
 #define STM32_HSI_ENABLED                   TRUE
-#define STM32_LSI_ENABLED                   FALSE
+#define STM32_LSI_ENABLED                   TRUE
 #define STM32_HSE_ENABLED                   TRUE
-#define STM32_LSE_ENABLED                   TRUE
+#define STM32_LSE_ENABLED                   FALSE
 #define STM32_CLOCK48_REQUIRED              TRUE
 #define STM32_SW                            STM32_SW_PLL
 #define STM32_PLLSRC                        STM32_PLLSRC_HSE
@@ -54,8 +54,8 @@
 #define STM32_HPRE                          STM32_HPRE_DIV1
 #define STM32_PPRE1                         STM32_PPRE1_DIV4
 #define STM32_PPRE2                         STM32_PPRE2_DIV2
-#define STM32_RTCSEL                        STM32_RTCSEL_LSE
-#define STM32_RTCPRE_VALUE                  25
+#define STM32_RTCSEL                        STM32_RTCSEL_LSI
+#define STM32_RTCPRE_VALUE                  8
 #define STM32_MCO1SEL                       STM32_MCO1SEL_HSE
 #define STM32_MCO1PRE                       STM32_MCO1PRE_DIV1
 #define STM32_MCO2SEL                       STM32_MCO2SEL_SYSCLK
@@ -85,7 +85,7 @@
 #define STM32_I2C3SEL                       STM32_I2C3SEL_PCLK1
 #define STM32_I2C4SEL                       STM32_I2C4SEL_PCLK1
 #define STM32_LPTIM1SEL                     STM32_LPTIM1SEL_PCLK1
-#define STM32_CECSEL                        STM32_CECSEL_LSE
+#define STM32_CECSEL                        STM32_CECSEL_LSI
 #define STM32_CK48MSEL                      STM32_CK48MSEL_PLL
 #define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL48CLK
 #define STM32_SRAM2_NOCACHE                 FALSE
