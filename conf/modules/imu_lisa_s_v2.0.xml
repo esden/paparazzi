@@ -1,0 +1,21 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="imu_lisa_s_2_0" dir="imu">
+  <doc>
+    <description>
+      MPU9250 IMU via SPI.
+      Some adjustments due to different SPI interface and orientation to other ap.
+    </description>
+  </doc>
+  <autoload name="imu_mpu9250_spi"/>
+  <makefile target="!sim|nps|fbw">
+    <define name="IMU_MPU9250_CHAN_X" value="1"/>
+    <define name="IMU_MPU9250_CHAN_Y" value="0"/>
+    <define name="IMU_MPU9250_CHAN_Z" value="2"/>
+    <define name="IMU_MPU9250_X_SIGN" value="-1"/>
+    <define name="IMU_MPU9250_Y_SIGN" value="-1"/>
+    <define name="IMU_MPU9250_Z_SIGN" value="-1"/>
+    <configure name="IMU_MPU9250_SPI_DEV" value="spi4"/>
+    <configure name="IMU_MPU9250_SPI_SLAVE_IDX" value="SPI_SLAVE2"/>
+  </makefile>
+</module>

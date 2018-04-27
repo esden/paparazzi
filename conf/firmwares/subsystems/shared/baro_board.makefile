@@ -149,6 +149,17 @@ else ifeq ($(BOARD), lisa_s)
   BARO_BOARD_SRCS += peripherals/ms5611_spi.c
   BARO_BOARD_SRCS += boards/baro_board_ms5611_spi.c
 
+# Lisa/S 2.0 baro
+else ifeq ($(BOARD), lisa_s_2)
+# defaults to SPI baro MS5611 on the board
+  include $(CFG_SHARED)/spi_master.makefile
+  BARO_BOARD_CFLAGS += -DUSE_SPI1 -DUSE_SPI_SLAVE3
+  BARO_BOARD_CFLAGS += -DBB_MS5611_SPI_DEV=spi4
+  BARO_BOARD_CFLAGS += -DBB_MS5611_SLAVE_IDX=SPI_SLAVE3
+  BARO_BOARD_SRCS += peripherals/ms5611.c
+  BARO_BOARD_SRCS += peripherals/ms5611_spi.c
+  BARO_BOARD_SRCS += boards/baro_board_ms5611_spi.c
+
 # ELLE0 baro
 else ifeq ($(BOARD), elle0)
 

@@ -165,6 +165,17 @@
    gui_color="white"
   />
   <aircraft
+   name="Quad_LisaS2"
+   ac_id="164"
+   airframe="airframes/examples/quadrotor_lisa_s_2.xml"
+   radio="radios/T10CG_SBUS.xml"
+   telemetry="telemetry/default_rotorcraft.xml"
+   flight_plan="flight_plans/rotorcraft_basic.xml"
+   settings="settings/rotorcraft_basic.xml"
+   settings_modules="modules/guidance_indi.xml modules/stabilization_indi.xml modules/nav_basic_rotorcraft.xml modules/guidance_rotorcraft.xml modules/gps.xml modules/air_data.xml modules/imu_common.xml"
+   gui_color="#ffff7f7f0000"
+  />
+  <aircraft
    name="Quad_NavGo"
    ac_id="23"
    airframe="airframes/examples/quadrotor_navgo.xml"

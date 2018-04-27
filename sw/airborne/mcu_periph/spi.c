@@ -74,6 +74,16 @@ void spi3_init(void)
 }
 #endif // USE_SPI3
 
+#if USE_SPI4
+struct spi_periph spi4;
+
+void spi4_init(void)
+{
+  spi_init(&spi4);
+  spi4_arch_init();
+}
+#endif // USE_SPI4
+
 
 void spi_init(struct spi_periph *p)
 {
@@ -131,6 +141,16 @@ void spi3_slave_init(void)
   spi3_slave_arch_init();
 }
 #endif // USE_SPI3_SLAVE
+
+#if USE_SPI4_SLAVE
+struct spi_periph spi4;
+
+void spi4_slave_init(void)
+{
+  spi_slave_init(&spi4);
+  spi4_slave_arch_init();
+}
+#endif // USE_SPI4_SLAVE
 
 
 extern void spi_slave_init(struct spi_periph *p)
