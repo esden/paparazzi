@@ -15,6 +15,7 @@
     <define name="IMU_MPU9250_X_SIGN" value="-1"/>
     <define name="IMU_MPU9250_Y_SIGN" value="-1"/>
     <define name="IMU_MPU9250_Z_SIGN" value="-1"/>
+    <define name="USE_SPI4"/>
     <configure name="IMU_MPU9250_SPI_DEV" value="spi4"/>
     <configure name="IMU_MPU9250_SPI_SLAVE_IDX" value="SPI_SLAVE2"/>
   </makefile>
