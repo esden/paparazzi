@@ -57,7 +57,7 @@
 #define STM32_RTCSEL                        STM32_RTCSEL_LSI
 #define STM32_RTCPRE_VALUE                  8
 #define STM32_MCO1SEL                       STM32_MCO1SEL_HSE
-#define STM32_MCO1PRE                       STM32_MCO1PRE_DIV1
+#define STM32_MCO1PRE                       STM32_MCO1PRE_DIV4
 #define STM32_MCO2SEL                       STM32_MCO2SEL_SYSCLK
 #define STM32_MCO2PRE                       STM32_MCO2PRE_DIV4
 #define STM32_I2SSRC                        STM32_I2SSRC_PLLI2S
@@ -85,7 +85,7 @@
 #define STM32_I2C3SEL                       STM32_I2C3SEL_PCLK1
 #define STM32_I2C4SEL                       STM32_I2C4SEL_PCLK1
 #define STM32_LPTIM1SEL                     STM32_LPTIM1SEL_PCLK1
-#define STM32_CECSEL                        STM32_CECSEL_LSI
+#define STM32_CECSEL                        STM32_CECSEL_HSIDIV488
 #define STM32_CK48MSEL                      STM32_CK48MSEL_PLL
 #define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL48CLK
 #define STM32_SRAM2_NOCACHE                 FALSE
