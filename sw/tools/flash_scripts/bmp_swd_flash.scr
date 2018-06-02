@@ -1,5 +1,7 @@
 # Print BMPM version
 monitor version
+# Enable target power to provide reference voltage to the level shifters
+mon tpwr enable
 # To make sure the target is not in a "strange" mode we tell BMPM to reset the
 # target using the reset pin.
 mon connect_srst enable
