@@ -56,7 +56,6 @@ static void ThdBlinker(void *arg) {
 #endif
     chThdSleepMilliseconds(500);
   }
-  chThdExit(0);
 }
 
 static THD_WORKING_AREA(waThdTx, 1024);
@@ -68,7 +67,6 @@ static void ThdTx(void *arg) {
     DOWNLINK_SEND_ALIVE(DefaultChannel, DefaultDevice, 16, MD5SUM);
     chThdSleepMilliseconds(100);
   }
-  chThdExit(0);
 }
 
 
@@ -76,7 +74,10 @@ int main(void)
 {
   mcu_init();
 
+  chThdSleepMilliseconds(100);
+
   downlink_init();
+  pprz_dl_init();
 
   /*
    * Creates the blinker thread.
@@ -86,7 +87,8 @@ int main(void)
 
   while (TRUE) {
     chThdSleep(S2ST(1));
+    //chThdSleepMilliseconds(1000);
   }
 
-  chThdExit(0);
+  return 0;
 }

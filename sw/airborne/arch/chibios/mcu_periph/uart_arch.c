@@ -843,8 +843,8 @@ uint8_t uart_getch(struct uart_periph *p)
 {
   //to keep compatibility with loop oriented paparazzi architecture, read is not blocking
   //struct SerialInit *init_struct = (struct SerialInit*)(p->init_struct);
+  //chSemWait (init_struct->rx_sem);
   struct SerialInit *init_struct = (struct SerialInit *)(p->init_struct);
-  chSemWait (init_struct->rx_sem);
   chMtxLock(init_struct->rx_mtx);
   uint8_t ret = p->rx_buf[p->rx_extract_idx];
   p->rx_extract_idx = (p->rx_extract_idx + 1) % UART_RX_BUFFER_SIZE;

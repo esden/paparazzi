@@ -33,6 +33,17 @@
 #include "mcu_periph/uart.h"
 #include "mcu_periph/uart_arch.h"
 
+/* This is a copy of the struct from the uart_arch.c file
+ * there is no other way to access the semaphor and wait
+ * far rx data to come in. There is no function for that.
+ */
+struct SerialInit {
+  SerialConfig *conf;
+  semaphore_t *rx_sem;
+  semaphore_t *tx_sem;
+  mutex_t *rx_mtx;
+  mutex_t *tx_mtx;
+};
 
 /*
  * Thread Area Definitions
@@ -85,6 +96,7 @@ __attribute__((noreturn)) void thd_rx(void *arg)
 #ifdef LED_GREEN
       LED_TOGGLE(LED_GREEN);
 #endif
+    chSemWait(((struct SerialInit *)SERIAL_PORT.init_struct)->rx_sem);
     charbuf = uart_getch(&SERIAL_PORT);
     if (charbuf != 0) {
     	uart_put_byte(&SERIAL_PORT, 0, charbuf);
