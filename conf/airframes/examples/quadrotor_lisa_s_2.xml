@@ -143,6 +143,19 @@
 
   </firmware>
 
+  <firmware name="test_chibios">
+    <target name="test_sys_time_timer" board="lisa_s_2.0"/>
+    <target name="test_led" board="lisa_s_2.0"/>
+    <target name="test_sys_gpio" board="lisa_s_2.0"/>
+    <target name="test_serial" board="lisa_s_2.0">
+	    <define name="SERIAL_PORT" value="uart2"/>
+	    <define name="USE_UART2"/>
+	    <define name="UART2_BAUD" value="B57600"/>
+    </target>
+    <target name="test_telemetry" board="lisa_s_2.0"/>
+  </firmware>
+
+
   <servos driver="Pwm">
     <servo name="FR" no="0" min="1000" neutral="1100" max="2000"/>
     <servo name="BR" no="1" min="1000" neutral="1100" max="2000"/>

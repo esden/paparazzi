@@ -33,6 +33,8 @@
 /* ChibiOS includes */
 #include "ch.h"
 
+#define DATALINK_C
+
 /* paparazzi includes */
 #include "mcu.h"
 #include "mcu_periph/sys_time.h"
@@ -54,7 +56,7 @@ static void ThdBlinker(void *arg) {
 #endif
     chThdSleepMilliseconds(500);
   }
-  return 0;
+  chThdExit(0);
 }
 
 static THD_WORKING_AREA(waThdTx, 1024);
@@ -66,7 +68,7 @@ static void ThdTx(void *arg) {
     DOWNLINK_SEND_ALIVE(DefaultChannel, DefaultDevice, 16, MD5SUM);
     chThdSleepMilliseconds(100);
   }
-  return 0;
+  chThdExit(0);
 }
 
 
@@ -86,5 +88,5 @@ int main(void)
     chThdSleep(S2ST(1));
   }
 
-  return 0;
+  chThdExit(0);
 }

@@ -86,7 +86,9 @@ __attribute__((noreturn)) void thd_rx(void *arg)
       LED_TOGGLE(LED_GREEN);
 #endif
     charbuf = uart_getch(&SERIAL_PORT);
-    uart_transmit(&SERIAL_PORT, charbuf);
+    if (charbuf != 0) {
+    	uart_put_byte(&SERIAL_PORT, 0, charbuf);
+    }
   }
 }
 
@@ -104,14 +106,14 @@ int main(void)
   while (1) {
     /* sleep for 1s */
     sys_time_ssleep(1);
-    uart_transmit(&SERIAL_PORT, 'N');
-    uart_transmit(&SERIAL_PORT, 'i');
-    uart_transmit(&SERIAL_PORT, 'c');
-    uart_transmit(&SERIAL_PORT, 'e');
+    uart_put_byte(&SERIAL_PORT, 0, 'N');
+    uart_put_byte(&SERIAL_PORT, 0, 'i');
+    uart_put_byte(&SERIAL_PORT, 0, 'c');
+    uart_put_byte(&SERIAL_PORT, 0, 'e');
 
     sys_time_msleep(500);
     uint8_t tx_switch[] = " work!\r\n";
-    uart_transmit_buffer(&SERIAL_PORT, tx_switch, sizeof(tx_switch));
+    uart_put_buffer(&SERIAL_PORT, 0, tx_switch, sizeof(tx_switch));
   }
 
   return 0;

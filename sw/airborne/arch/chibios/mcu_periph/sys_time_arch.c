@@ -138,9 +138,9 @@ static void sys_tick_handler(void)
   /* max time is 2^32 / CH_CFG_ST_FREQUENCY, i.e. around 10 days at 10kHz */
   uint32_t sec = sys_time.nb_tick / CH_CFG_ST_FREQUENCY;
 #ifdef SYS_TIME_LED
-  if (sec > sys_time.nb_sec) {
-    LED_TOGGLE(SYS_TIME_LED);
-  }
+  //if (sec > sys_time.nb_sec) {
+  //  LED_TOGGLE(SYS_TIME_LED);
+  //}
 #endif
   sys_time.nb_sec = sec;
   sys_time.nb_sec_rem = sys_time.nb_tick - sys_time_ticks_of_sec(sys_time.nb_sec);

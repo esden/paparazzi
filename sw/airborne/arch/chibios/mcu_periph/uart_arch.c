@@ -184,16 +184,18 @@ void uart1_init(void)
 
 
 #if USE_UART2
-
+#pragma message "uart2 enabled"
 #ifndef UART2_BAUD
 #define UART2_BAUD SERIAL_DEFAULT_BITRATE
 #endif
 
 /* by default enable UART Tx and Rx */
 #ifndef USE_UART2_TX
+#pragma message "uart2tx enabled"
 #define USE_UART2_TX TRUE
 #endif
 #ifndef USE_UART2_RX
+#pragma message "uart2rx enabled"
 #define USE_UART2_RX TRUE
 #endif
 
@@ -841,8 +843,8 @@ uint8_t uart_getch(struct uart_periph *p)
 {
   //to keep compatibility with loop oriented paparazzi architecture, read is not blocking
   //struct SerialInit *init_struct = (struct SerialInit*)(p->init_struct);
-  //chSemWait (init_struct->rx_sem);
   struct SerialInit *init_struct = (struct SerialInit *)(p->init_struct);
+  chSemWait (init_struct->rx_sem);
   chMtxLock(init_struct->rx_mtx);
   uint8_t ret = p->rx_buf[p->rx_extract_idx];
   p->rx_extract_idx = (p->rx_extract_idx + 1) % UART_RX_BUFFER_SIZE;

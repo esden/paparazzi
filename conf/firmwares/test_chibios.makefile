@@ -38,6 +38,8 @@ SRC_BOARD=boards/$(BOARD)
 SRC_SUBSYSTEMS=subsystems
 SRC_MODULES=modules
 
+VPATH += $(PAPARAZZI_HOME)/var/share
+
 CFG_SHARED=$(PAPARAZZI_SRC)/conf/firmwares/subsystems/shared
 
 # Enable debug mode by default for test programs
@@ -58,16 +60,16 @@ COMMON_TEST_CFLAGS += -DUSE_CHIBIOS_RTOS
 COMMON_TEST_CFLAGS += -DPERIPHERALS_AUTO_INIT
 COMMON_TEST_SRCS    = mcu.c $(SRC_ARCH)/mcu_arch.c
 ifneq ($(SYS_TIME_LED),none)
-  COMMON_TEST_CFLAGS += -DSYS_TIME_LED=$(SYS_TIME_LED)
+	COMMON_TEST_CFLAGS += -DSYS_TIME_LED=$(SYS_TIME_LED)
 endif
 COMMON_TEST_CFLAGS += -DPERIODIC_FREQUENCY=$(PERIODIC_FREQUENCY)
-COMMON_TEST_SRCS   += mcu_periph/sys_time.c $(SRC_ARCH)/mcu_periph/sys_time_arch.c
+COMMON_TEST_SRCS   += mcu_periph/sys_time.c $(SRC_ARCH)/mcu_periph/sys_time_arch.c $(SRC_ARCH)/mcu_periph/gpio_arch.c
 
 COMMON_TEST_CFLAGS += -DUSE_LED
 
 # pprz downlink/datalink
 COMMON_TELEMETRY_CFLAGS = -DDOWNLINK -DDOWNLINK_TRANSPORT=pprz_tp -DDATALINK=PPRZ
-COMMON_TELEMETRY_SRCS   = subsystems/datalink/downlink.c subsystems/datalink/pprz_transport.c modules/datalink/pprz_dl.c
+COMMON_TELEMETRY_SRCS   = subsystems/datalink/downlink.c $(PAPARAZZI_HOME)/var/share/pprzlink/src/pprz_transport.c modules/datalink/pprz_dl.c
 
 COMMON_TELEMETRY_MODEM_PORT_LOWER=$(shell echo $(MODEM_PORT) | tr A-Z a-z)
 COMMON_TELEMETRY_CFLAGS += -DUSE_$(MODEM_PORT) -D$(MODEM_PORT)_BAUD=$(MODEM_BAUD)
